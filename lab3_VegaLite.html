@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<head>
+    <title>Vega Lite Bar Chart</title>
+    <meta charset="utf-8">
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vega/3.0.8/vega.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vega-lite/2.0.4/vega-lite.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vega-embed/3.0.0-rc7/vega-embed.js"></script>
+
+    <!--uncomment if you decide to use advanced tooltips-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vega-tooltip/0.4.4/vega-tooltip.js"></script>
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/vega-tooltip/0.4.4/vega-tooltip.css">
+    <!--d3 and jquery might be helpful if you want to load data only once-->
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <style media="screen">
+        /* Add space between Vega-Embed links  */
+        .vega-actions a {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Container for the visualization -->
+<div id="chart1"></div>
+<div id="chart2"></div>
+<div id="chart3"></div>
+<div id="chart4"></div>
+<div id="chart5"></div>
+<div id="chart5_1"></div>
+<div id="chart5_2"></div>
+<div id="chart6"></div>
+
+
+<script>
+    //initiate renderer, use it for all vega-embed.
+    var opt = {"renderer": "svg", mode: "vega-lite"};
+    var width = 600;
+
+    //chart 1
+
+    var chart1 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v2.json",
+        "title": "Chart 1",
+        "data": {
+            "url": "./movies_lab3.json",
+            "format": {
+                "type": "json"
+            }
+        },
+        "mark": "point",
+        "encoding": {
+            "x": {
+                "field": "Major_Genre",
+                "type": "nominal",
+                "axis":{
+                    "title": "Movie Genre"
+                }
+            },
+            "y": {
+                "field": "Worldwide_Gross",
+                "type": "quantitative",
+                "axis": {
+                    "title": "Worldwide Gross"
+                }
+            },
+        },
+        "width": width,
+    };
+    vegaEmbed("#chart1", chart1, opt);
+
+    //chart 2
+
+    var chart2 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v2.json",
+        "title": "Chart 2",
+        "data": {
+            "url": "./movies_lab3.json",
+            "format": {
+                "type": "json"
+            }
+        },
+        "mark": "line",
+        "encoding": {
+            "x": {
+                "field": "Major_Genre",
+                "type": "nominal",
+                "axis":{
+                    "title": "Movie Genre"
+                }
+            },
+            "y": {
+                "field": "Worldwide_Gross",
+                "aggregate": "average",
+                "type": "quantitative",
+                "axis": {
+                    "title": "Average of Worldwide Gross"
+                }
+            }
+        },
+        "width": width
+    };
+    vegaEmbed("#chart2", chart2, opt);
+
+    //chart 3
+
+    var chart3 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v2.json",
+        "title": "Chart 3",
+        "data": {
+            "url": "./movies_lab3.json",
+            "format": {
+                "type": "json"
+            }
+        },
+        "layer": [
+            {
+            "mark": "line",
+            "encoding": {
+                "x": {
+                    "field": "Major_Genre",
+                    "type": "nominal",
+                    "axis":{
+                        "title": "Movie Genre"
+                    }
+                },
+                "y": {
+                    "field": "Worldwide_Gross",
+                    "aggregate": "average",
+                    "type": "quantitative",
+                    "axis": {
+                        "title": "Average of Worldwide Gross"
+                        }
+                    }
+                }
+            },
+            {
+            "mark": "square",
+            "encoding": {
+                "x": {
+                    "field": "Major_Genre",
+                    "type": "nominal",
+                    "axis":{
+                        "title": "Movie Genre"
+                    }
+                },
+                "y": {
+                    "field": "Worldwide_Gross",
+                    "type": "quantitative",
+                    "axis": {
+                        "title": "Average of Worldwide Gross, Worldwide Gross"
+                        }
+                    },
+                "color": {
+                    "field": "Major_Genre",
+                    "type": "nominal",
+                    "scale": {
+                        "legend": "Major Genre"
+                        }
+                    },
+                "tooltip": {
+                    "field": "Title",
+                    "type": "nominal"
+                    }
+                }
+            }
+        ],
+        "width": width
+    };
+    vegaEmbed("#chart3", chart3, opt);
+
+    //chart 4
+    var chart4 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v2.json",
+        "title": "Chart 4",
+        "data": {
+            "url": "./movies_lab3.json",
+            "format": {
+                "type": "json"
+            }
+        },
+        "transform":[{
+            "calculate":"datum.Worldwide_Gross - datum.Production_Budget",
+            "as": "Revenue"
+        }],
+        "layer": [
+            {
+            "mark": "line",
+            "encoding": {
+                "x": {
+                    "field": "Major_Genre",
+                    "type": "nominal",
+                    "axis":{
+                        "title": "Movie Genre"
+                    }
+                },
+                "y": {
+                    "field": "Revenue",
+                    "aggregate": "average",
+                    "type": "quantitative",
+                    "axis": {
+                        "title": "Average of Revenue"
+                        }
+                    }
+                }
+            },
+            {
+            "mark": "square",
+            "encoding": {
+                "x": {
+                    "field": "Major_Genre",
+                    "type": "nominal",
+                    "axis":{
+                        "title": "Movie Genre"
+                    }
+                },
+                "y": {
+                    "field": "Revenue",
+                    "type": "quantitative",
+                    "axis": {
+                        "title": "Average of Revenue, Revenue"
+                        }
+                    },
+                "color": {
+                    "field": "Major_Genre",
+                    "type": "nominal",
+                    "scale": {
+                        "legend": "Major Genre"
+                        }
+                    },
+                "tooltip": {
+                    "field": "Title",
+                    "type": "nominal"
+                    }
+                }
+            }
+        ],
+        "width": width
+    };
+    vegaEmbed("#chart4", chart4, opt);
+
+    //chart 5
+
+    // var chart5_1 = {
+    //     "$schema": "https://vega.github.io/schema/vega-lite/v2.json",
+    //     "title": "Chart 5_1",
+    //     "data": {
+    //         "url": "./movies_lab3.json",
+    //         "format": {
+    //             "type": "json"
+    //         }
+    //     },
+    //     "transform":[{
+    //         "calculate":"datum.Worldwide_Gross - datum.Production_Budget",
+    //         "as": "Revenue"
+    //     }],
+    //     "mark": "line",
+    //     "encoding": {
+    //         "x": {
+    //             "timeUnit":"month",
+    //             "field": "Release_Date",
+    //             "type": "nominal",
+    //             "axis":{
+    //                 "title": "Release Date (month)"
+    //             }
+    //         },
+    //         "y": {
+    //             "field": "Revenue",
+    //             "aggregate": "average",
+    //             "type": "quantitative",
+    //             "axis": {
+    //                 "title": "Average of Revenue"
+    //             }
+    //         }
+    //     },
+    //     "width": width
+    // };
+    // vegaEmbed("#chart5_1", chart5_1, opt);
+    //
+    // var chart5_2 = {
+    //     "$schema": "https://vega.github.io/schema/vega-lite/v2.json",
+    //     "title": "Chart 5_2",
+    //     "data": {
+    //         "url": "./movies_lab3.json",
+    //         "format": {
+    //             "type": "json"
+    //         }
+    //     },
+    //     "transform":[{
+    //         "calculate":"datum.Worldwide_Gross - datum.Production_Budget",
+    //         "as": "Revenue"
+    //     }],
+    //     "mark": "line",
+    //     "encoding": {
+    //         "x": {
+    //             "timeUnit": "day",
+    //             "field": "Release_Date",
+    //             "type": "nominal",
+    //             "axis":{
+    //                 "title": "Release Date (day)"
+    //             }
+    //         },
+    //         "y": {
+    //             "field": "Revenue",
+    //             "aggregate": "average",
+    //             "type": "quantitative",
+    //             "axis": {
+    //                 "title": "Average of Revenue"
+    //             }
+    //         }
+    //     },
+    //     "width": width
+    // };
+    // vegaEmbed("#chart5_2", chart5_2, opt);
+
+    var chart5 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v2.json",
+        "title": "Chart 5",
+        "data": {
+            "url": "./movies_lab3.json",
+            "format": {
+                "type": "json"
+            }
+        },
+        "transform":[{
+            "calculate":"datum.Worldwide_Gross - datum.Production_Budget",
+            "as": "Revenue",
+        }],
+        "vconcat": [
+            {
+            "selection": {
+                "brush": {
+                    "type": "interval",
+                    "encodings":['x']
+                    }
+                },
+            "mark": "line",
+            "encoding": {
+                "x": {
+                    "timeUnit": "month",
+                    "field": "Release_Date",
+                    "type": "nominal",
+                    "axis":{
+                        "title": "Release Date (month)"
+                            }
+                        },
+                "y": {
+                    "field": "Revenue",
+                    "aggregate": "average",
+                    "type": "quantitative",
+                    "axis": {
+                        "title": "Average of Revenue"
+                            }
+                        }
+                    },
+            "width": width,
+            },
+            {
+            "transform":[{
+                "filter":{"selection": "brush"}
+            }],
+            "mark": "line",
+            "encoding": {
+                "x": {
+                    "timeUnit":"day",
+                    "field": "Release_Date",
+                    "type": "nominal",
+                    "axis":{
+                        "title": "Release Date (day)"
+                    }
+                },
+                "y": {
+                    "field": "Revenue",
+                    "aggregate": "average",
+                    "type": "quantitative",
+                    "axis": {
+                        "title": "Average of Revenue"
+                        }
+                    }
+                },
+            "width": width,
+            }
+        ],
+    };
+    vegaEmbed("#chart5", chart5, opt);
+
+    // Per the instructions, you will first create chart 5_1 and chart 5_2.
+    // After merging them into chart 5, you can delete chart 5_1 and chart 5_2 if you want.
+
+    //(BONUS) chart 6
+
+    var chart6 = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v2.json",
+        "title": "Average Revenue by Major Genre (Tooltip Movie Count)",
+        "data": {
+            "url": "./movies_lab3.json",
+            "format": {
+                "type": "json"
+            }
+        },
+        "transform":[{
+            "calculate":"datum.Worldwide_Gross - datum.Production_Budget",
+            "as": "Revenue",
+        }],
+        "vconcat": [
+            {
+            "selection": {
+                "brush": {
+                    "type": "interval",
+                    "encodings":['x']
+                    }
+                },
+            "mark": "line",
+            "encoding": {
+                "x": {
+                    "timeUnit": "month",
+                    "field": "Release_Date",
+                    "type": "nominal",
+                    "axis":{
+                        "title": "Release Date (month)"
+                            }
+                        },
+                "y": {
+                    "field": "Revenue",
+                    "aggregate": "average",
+                    "type": "quantitative",
+                    "axis": {
+                        "title": "Average of Revenue"
+                            }
+                        }
+                    },
+            "width": width,
+            },
+            {
+            "transform":[{
+                "filter":{"selection": "brush"}
+            }],
+            "mark": "bar",
+            "encoding": {
+                "x": {
+                    "field": "Major_Genre",
+                    "type": "nominal",
+                    "axis":{
+                        "title": "Major Genre"
+                    }
+                },
+                "y": {
+                    "field": "Revenue",
+                    "aggregate": "average",
+                    "type": "quantitative",
+                    "axis": {
+                        "title": "Average of Revenue"
+                        }
+                    },
+                "tooltip": {
+                    "field": "Title",
+                    "type": "quantitative",
+                    "aggregate": "count"
+                    },
+                "color":{"value": "goldenrod"}
+                },
+            "width": width,
+            }
+        ],
+    };
+    vegaEmbed("#chart6", chart6, opt);
+
+    // Couldn't get text to be added to the tooltip
+
+</script>
+</body>
+</html>
